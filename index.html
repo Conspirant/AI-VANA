@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aivana - Free AI Tools</title>
+  <title>Aivana - Free AI Tools & Unique Experiences</title>
   <!-- Google Fonts & Font Awesome -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
@@ -12,6 +12,7 @@
   <!-- Particles.js Library for Interactive Background -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
+    /* Root & Light Mode Variables */
     :root {
       --primary: #6366f1;
       --secondary: #8b5cf6;
@@ -19,7 +20,7 @@
       --background: #0f172a;
       --surface: rgba(255, 255, 255, 0.05);
       --text: #f8fafc;
-      --neon: 0 0 15px rgba(99, 102, 241, 0.3);
+      --neon: 0 0 15px rgba(99,102,241,0.3);
       --toast-bg: rgba(0, 0, 0, 0.8);
     }
     .light-mode {
@@ -29,14 +30,10 @@
       --background: #f8f8f8;
       --surface: rgba(0, 0, 0, 0.05);
       --text: #333;
-      --neon: 0 0 15px rgba(59, 130, 246, 0.3);
+      --neon: 0 0 15px rgba(59,130,246,0.3);
       --toast-bg: rgba(255, 255, 255, 0.9);
     }
-    * {
-      margin: 0; padding: 0;
-      box-sizing: border-box;
-      font-family: 'Inter', sans-serif;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
     body {
       background: var(--background);
       color: var(--text);
@@ -46,7 +43,7 @@
       position: relative;
       overflow-x: hidden;
     }
-    /* Particles Container (for interactive background) */
+    /* Particles Background Container */
     #particles-js {
       position: fixed;
       width: 100%;
@@ -54,7 +51,7 @@
       z-index: -1;
       top: 0; left: 0;
     }
-    /* News Ticker */
+    /* Live AI News Ticker */
     .news-ticker {
       width: 100%;
       background: var(--secondary);
@@ -62,7 +59,6 @@
       padding: 0.5rem 1rem;
       white-space: nowrap;
       overflow: hidden;
-      position: relative;
       font-size: 0.9rem;
     }
     .ticker-text {
@@ -122,11 +118,11 @@
       text-shadow: 0 0 20px rgba(99,102,241,0.5);
     }
     .header p {
-      color: rgba(255, 255, 255, 0.9);
+      color: rgba(255,255,255,0.9);
       max-width: 600px;
       margin: 0 auto;
     }
-    /* Container & Search */
+    /* Main Container & Search */
     .container {
       max-width: 1280px;
       margin: -4rem auto 0;
@@ -143,15 +139,15 @@
       max-width: 500px;
       padding: 1rem 1.5rem;
       border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.1);
       color: var(--text);
       outline: none;
       font-size: 1rem;
       transition: background 0.3s ease;
     }
     .search-container input:focus {
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255,255,255,0.2);
     }
     .search-container button {
       margin-top: 1rem;
@@ -162,14 +158,8 @@
       cursor: pointer;
       transition: all 0.3s ease;
     }
-    .unique-btn {
-      background: var(--accent);
-      color: white;
-    }
-    .unique-btn:hover {
-      background: var(--secondary);
-      box-shadow: var(--neon);
-    }
+    .unique-btn { background: var(--accent); color: white; }
+    .unique-btn:hover { background: var(--secondary); box-shadow: var(--neon); }
     /* Tools Grid */
     .tools-grid {
       display: grid;
@@ -182,7 +172,7 @@
       border-radius: 16px;
       padding: 1.5rem;
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255,255,255,0.1);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       position: relative;
     }
@@ -271,7 +261,7 @@
       z-index: 1100;
     }
     .toast.show { opacity: 1; pointer-events: auto; }
-    /* Modal Styles (for Story Generator & Quiz) */
+    /* Modal Common Styles */
     .modal {
       display: none;
       position: fixed;
@@ -309,10 +299,10 @@
   <!-- Live AI News Ticker -->
   <div class="news-ticker">
     <div class="ticker-text">
-      Breaking: New AI breakthrough announced! &nbsp;&nbsp;&nbsp;
-      AI now writes poetry on demand! &nbsp;&nbsp;&nbsp;
-      Free AI tools revolutionizing tech! &nbsp;&nbsp;&nbsp;
-      Discover innovative AI resources today!
+      Breaking: New AI breakthrough! &nbsp;&nbsp;&nbsp;
+      AI now composes symphonies on demand! &nbsp;&nbsp;&nbsp;
+      Free AI tools are reshaping innovation! &nbsp;&nbsp;&nbsp;
+      Stay ahead with cutting-edge AI insights!
     </div>
   </div>
 
@@ -320,16 +310,19 @@
   <nav class="navbar">
     <div class="logo">Aivana</div>
     <div class="nav-buttons">
+      <!-- Mode Toggle, Submit, Sign In -->
       <button id="modeToggle"><i class="fas fa-sun"></i></button>
       <button id="submitBtn"><i class="fas fa-upload"></i> Submit AI</button>
       <button id="authBtn"><i class="fas fa-user"></i> Sign In</button>
+      <!-- NEW: Chat with AI Vana -->
+      <button id="chatBtn"><i class="fas fa-comments"></i> Chat with AI Vana</button>
     </div>
   </nav>
 
   <!-- Header -->
   <header class="header">
-    <h1>Free AI Tools</h1>
-    <p>Curated collection of 100% free-to-use AI resources</p>
+    <h1>Free AI Tools & Unique Experiences</h1>
+    <p>Curated collection of free-to-use AI resources plus exclusive interactive features</p>
   </header>
 
   <!-- Main Content -->
@@ -341,12 +334,13 @@
       <button class="unique-btn" id="randomBtn">Surprise Me!</button>
       <button class="unique-btn" id="storyBtn">Generate AI Story</button>
       <button class="unique-btn" id="quizBtn">Take AI Quiz</button>
+      <button class="unique-btn" id="artBtn">View AI Art Gallery</button>
+      <button class="unique-btn" id="voiceBtn">Speak AI Fact</button>
     </div>
 
-    <!-- Tools Grid (Existing Tool Cards) -->
+    <!-- Tools Grid (Your AI Tools Cards) -->
     <div class="tools-grid" id="toolsContainer">
-      <!-- (Tool cards code from your previous version goes here) -->
-      <!-- For brevity, sample one card: -->
+      <!-- Example Card: (Repeat or add more as needed) -->
       <div class="tool-card" data-tool="DeepSeek">
         <button class="fav-btn" data-tool="DeepSeek"><i class="far fa-heart"></i></button>
         <span class="free-badge">Free API</span>
@@ -355,7 +349,7 @@
         <a href="https://deepseek.com" target="_blank">Visit Tool <i class="fas fa-external-link-alt"></i></a>
         <button class="share-btn" data-link="https://deepseek.com"><i class="fas fa-share-alt"></i></button>
       </div>
-      <!-- Add additional tool cards as needed... -->
+      <!-- Add additional cards similarly... -->
     </div>
   </div>
 
@@ -365,15 +359,27 @@
   <!-- Toast Notification -->
   <div id="toast" class="toast"></div>
 
+  <!-- === MODALS FOR UNIQUE FEATURES === -->
+
+  <!-- AI Chatbot Modal (Chat with AI Vana) -->
+  <div id="chatModal" class="modal">
+    <div class="modal-content">
+      <button class="modal-close" id="chatModalClose">&times;</button>
+      <h2>Chat with AI Vana</h2>
+      <!-- Replace the src URL with your own AI chatbot deployment -->
+      <iframe src="https://your-ai-chatbot-url.com" width="100%" height="400" style="border:none;"></iframe>
+    </div>
+  </div>
+
   <!-- AI Story Generator Modal -->
   <div id="storyModal" class="modal">
     <div class="modal-content">
       <button class="modal-close" id="storyModalClose">&times;</button>
       <h2>AI Story Generator</h2>
       <p>Enter a keyword to generate a short story:</p>
-      <input type="text" id="storyKeyword" placeholder="e.g., adventure" style="width: 80%; padding: 0.5rem; margin-bottom: 1rem;" />
+      <input type="text" id="storyKeyword" placeholder="e.g., adventure" style="width:80%; padding:0.5rem; margin-bottom:1rem;" />
       <button class="unique-btn" id="generateStoryBtn">Generate Story</button>
-      <p id="generatedStory" style="margin-top: 1rem; font-style: italic;"></p>
+      <p id="generatedStory" style="margin-top:1rem; font-style:italic;"></p>
     </div>
   </div>
 
@@ -384,21 +390,32 @@
       <h2>AI Quiz</h2>
       <p id="quizQuestion">Loading question...</p>
       <div id="quizOptions"></div>
-      <p id="quizResult" style="margin-top: 1rem; font-weight: bold;"></p>
-      <button class="unique-btn" id="nextQuizBtn" style="margin-top: 1rem;">Next Question</button>
+      <p id="quizResult" style="margin-top:1rem; font-weight:bold;"></p>
+      <button class="unique-btn" id="nextQuizBtn" style="margin-top:1rem;">Next Question</button>
     </div>
   </div>
 
-  <!-- JavaScript Section -->
+  <!-- AI Art Gallery Modal -->
+  <div id="artModal" class="modal">
+    <div class="modal-content">
+      <button class="modal-close" id="artModalClose">&times;</button>
+      <h2>AI Art Gallery</h2>
+      <img id="artImage" src="https://i.imgur.com/yourArt1.jpg" alt="AI Art" style="max-width:100%; border-radius:8px;" onerror="this.src='https://via.placeholder.com/400?text=Art+Unavailable'" />
+      <p id="artCaption" style="margin-top:1rem;"></p>
+      <button class="unique-btn" id="nextArtBtn" style="margin-top:1rem;">Next Art</button>
+    </div>
+  </div>
+
+  <!-- === JAVASCRIPT Section === -->
   <script>
     // --- Initialize Particles Background ---
     particlesJS.load('particles-js', 'https://raw.githubusercontent.com/VincentGarreau/particles.js/master/demo/particles.json', function() {
       console.log('Particles.js config loaded');
     });
 
-    // --- News Ticker is static in this example ---
+    // --- Live News Ticker is Static (update if you integrate a live API) ---
 
-    // --- Mode Toggle (Dark/Light) ---
+    // --- Mode Toggle ---
     const modeToggle = document.getElementById('modeToggle');
     modeToggle.addEventListener('click', () => {
       document.body.classList.toggle('light-mode');
@@ -427,7 +444,7 @@
       setTimeout(() => { toast.classList.remove('show'); }, 3000);
     }
 
-    // --- Random Tool Suggestion (Existing) ---
+    // --- Random Tool Suggestion ---
     const randomBtn = document.getElementById('randomBtn');
     randomBtn.addEventListener('click', () => {
       const cards = Array.from(document.querySelectorAll('.tool-card'));
@@ -441,6 +458,13 @@
       }
     });
 
+    // --- AI Chatbot Modal ---
+    const chatBtn = document.getElementById('chatBtn');
+    const chatModal = document.getElementById('chatModal');
+    const chatModalClose = document.getElementById('chatModalClose');
+    chatBtn.addEventListener('click', () => { chatModal.style.display = 'flex'; });
+    chatModalClose.addEventListener('click', () => { chatModal.style.display = 'none'; });
+
     // --- AI Story Generator ---
     const storyBtn = document.getElementById('storyBtn');
     const storyModal = document.getElementById('storyModal');
@@ -448,7 +472,6 @@
     const generateStoryBtn = document.getElementById('generateStoryBtn');
     const storyKeyword = document.getElementById('storyKeyword');
     const generatedStory = document.getElementById('generatedStory');
-
     storyBtn.addEventListener('click', () => {
       storyModal.style.display = 'flex';
       storyKeyword.value = '';
@@ -458,8 +481,7 @@
     generateStoryBtn.addEventListener('click', () => {
       const keyword = storyKeyword.value.trim();
       if(!keyword) { showToast("Please enter a keyword!"); return; }
-      // Simulate an AI-generated story
-      const story = `Once upon a time, in a land of ${keyword}, an unexpected adventure unfolded that changed everything...`;
+      const story = `In a world of ${keyword}, an extraordinary journey unfolded—filled with wonder and unexpected twists that changed destinies.`;
       generatedStory.textContent = story;
     });
 
@@ -471,7 +493,6 @@
     const quizOptions = document.getElementById('quizOptions');
     const quizResult = document.getElementById('quizResult');
     const nextQuizBtn = document.getElementById('nextQuizBtn');
-
     const quizData = [
       {
         question: "Which company developed ChatGPT?",
@@ -484,7 +505,7 @@
         answer: "Artificial Intelligence"
       },
       {
-        question: "Which tool is known for generating images?",
+        question: "Which tool is famous for generating images?",
         options: ["DeepSeek", "Craiyon", "ChatGPT", "Google Colab"],
         answer: "Craiyon"
       }
@@ -523,8 +544,53 @@
       loadQuiz();
     });
 
+    // --- AI Art Gallery Feature ---
+    const artBtn = document.getElementById('artBtn');
+    const artModal = document.getElementById('artModal');
+    const artModalClose = document.getElementById('artModalClose');
+    const artImage = document.getElementById('artImage');
+    const artCaption = document.getElementById('artCaption');
+    const nextArtBtn = document.getElementById('nextArtBtn');
+    const artGallery = [
+      { src: "https://i.imgur.com/yourArt1.jpg", caption: "Surreal AI dreamscape" },
+      { src: "https://i.imgur.com/yourArt2.jpg", caption: "Abstract AI expression" },
+      { src: "https://i.imgur.com/yourArt3.jpg", caption: "Futuristic AI vision" }
+    ];
+    let currentArt = 0;
+    artBtn.addEventListener('click', () => {
+      artModal.style.display = 'flex';
+      currentArt = 0;
+      artImage.src = artGallery[currentArt].src;
+      artCaption.textContent = artGallery[currentArt].caption;
+    });
+    artModalClose.addEventListener('click', () => { artModal.style.display = 'none'; });
+    nextArtBtn.addEventListener('click', () => {
+      currentArt = (currentArt + 1) % artGallery.length;
+      artImage.src = artGallery[currentArt].src;
+      artCaption.textContent = artGallery[currentArt].caption;
+    });
+
+    // --- Voice Assistant Feature: Speak a Random AI Fact ---
+    const voiceBtn = document.getElementById('voiceBtn');
+    const voiceFacts = [
+      "AI is revolutionizing every industry, from healthcare to entertainment.",
+      "Did you know that some AI models are trained on billions of words?",
+      "AI can now generate art, music, and even creative writing!",
+      "Interactive AI tools make technology accessible to everyone."
+    ];
+    voiceBtn.addEventListener('click', () => {
+      const randomFact = voiceFacts[Math.floor(Math.random() * voiceFacts.length)];
+      if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(randomFact);
+        speechSynthesis.speak(utterance);
+      } else {
+        showToast("Sorry, your browser does not support speech synthesis.");
+      }
+      showToast(randomFact);
+    });
     // --- End Unique Features ---
   </script>
 </body>
 </html>
+
 
