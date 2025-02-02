@@ -271,326 +271,42 @@
       justify-content: center;
       align-items: center;
       z-index: 1200;
+      padding: 1rem;
     }
     .modal-content {
       background: var(--surface);
       padding: 1.5rem;
       border-radius: 8px;
-      max-width: 500px;
-      width: 90%;
+      max-width: 800px;
+      width: 100%;
       text-align: center;
       position: relative;
     }
-    .modal-close {
-      position: absolute;
-      top: 10px; right: 10px;
-      background: transparent;
-      border: none;
-      font-size: 1.5rem;
-      color: var(--text);
-      cursor: pointer;
-    }
-  </style>
-</head>
-<body>
-  <!-- Particles Background -->
-  <div id="particles-js"></div>
+    /* For Full-Screen Chatbot Modal */
+    .modal.fullscreen .modal-content {\n      max-width: 100%;\n      height: 100%;\n      border-radius: 0;\n    }\n    \n    .modal-close {\n      position: absolute;\n      top: 10px; right: 10px;\n      background: transparent;\n      border: none;\n      font-size: 1.5rem;\n      color: var(--text);\n      cursor: pointer;\n    }\n  </style>\n</head>\n<body>\n  <!-- Particles Background -->\n  <div id=\"particles-js\"></div>\n\n  <!-- Live AI News Ticker -->\n  <div class=\"news-ticker\">\n    <div class=\"ticker-text\">\n      Breaking: New AI breakthrough! &nbsp;&nbsp;&nbsp;\n      AI now composes symphonies on demand! &nbsp;&nbsp;&nbsp;\n      Free AI tools are reshaping innovation! &nbsp;&nbsp;&nbsp;\n      Stay ahead with cutting-edge AI insights!\n    </div>\n  </div>\n\n  <!-- Navigation -->\n  <nav class=\"navbar\">\n    <div class=\"logo\">Aivana</div>\n    <div class=\"nav-buttons\">\n      <button id=\"modeToggle\"><i class=\"fas fa-sun\"></i></button>\n      <button id=\"submitBtn\"><i class=\"fas fa-upload\"></i> Submit AI</button>\n      <button id=\"authBtn\"><i class=\"fas fa-user\"></i> Sign In</button>\n      <button id=\"chatBtn\"><i class=\"fas fa-comments\"></i> Chat with AI Vana</button>\n    </div>\n  </nav>\n\n  <!-- Header -->\n  <header class=\"header\">\n    <h1>Free AI Tools & Unique Experiences</h1>\n    <p>Curated collection of free-to-use AI resources plus exclusive interactive features</p>\n  </header>\n\n  <!-- Main Content -->\n  <div class=\"container\">\n    <!-- Search & Unique Feature Buttons -->\n    <div class=\"search-container\">\n      <input type=\"text\" id=\"toolSearch\" placeholder=\"Search for AI tools...\" />\n      <br />\n      <button class=\"unique-btn\" id=\"randomBtn\">Surprise Me!</button>\n      <button class=\"unique-btn\" id=\"storyBtn\">Generate AI Story</button>\n      <button class=\"unique-btn\" id=\"quizBtn\">Take AI Quiz</button>\n      <button class=\"unique-btn\" id=\"artBtn\">View AI Art Gallery</button>\n      <button class=\"unique-btn\" id=\"voiceBtn\">Speak AI Fact</button>\n    </div>\n\n    <!-- Tools Grid (Your AI Tools Cards) -->\n    <div class=\"tools-grid\" id=\"toolsContainer\">\n      <!-- Example Card: Repeat or add more as needed -->\n      <div class=\"tool-card\" data-tool=\"DeepSeek\">\n        <button class=\"fav-btn\" data-tool=\"DeepSeek\"><i class=\"far fa-heart\"></i></button>\n        <span class=\"free-badge\">Free API</span>\n        <h3>DeepSeek</h3>\n        <p>Advanced AI assistant for research and development.</p>\n        <a href=\"https://deepseek.com\" target=\"_blank\">Visit Tool <i class=\"fas fa-external-link-alt\"></i></a>\n        <button class=\"share-btn\" data-link=\"https://deepseek.com\"><i class=\"fas fa-share-alt\"></i></button>\n      </div>\n      <!-- Additional tool cards go here -->\n    </div>\n  </div>\n\n  <!-- Back to Top Button -->\n  <button id=\"backToTop\" class=\"back-to-top\"><i class=\"fas fa-arrow-up\"></i></button>\n\n  <!-- Toast Notification -->\n  <div id=\"toast\" class=\"toast\"></div>\n\n  <!-- === MODALS FOR UNIQUE FEATURES === -->\n\n  <!-- Full-Screen AI Chatbot Modal -->\n  <div id=\"chatModal\" class=\"modal fullscreen\">\n    <div class=\"modal-content\">\n      <button class=\"modal-close\" id=\"chatModalClose\">&times;</button>\n      <h2>Chat with AI Vana</h2>\n      <!-- Replace the src URL with your Hugging Face Space URL for the chatbot -->\n      <iframe src=\"https://your-space-name.hf.space\" width=\"100%\" height=\"100%\" style=\"border:none;\"></iframe>\n    </div>\n  </div>\n\n  <!-- AI Story Generator Modal -->\n  <div id=\"storyModal\" class=\"modal\">\n    <div class=\"modal-content\">\n      <button class=\"modal-close\" id=\"storyModalClose\">&times;</button>\n      <h2>AI Story Generator</h2>\n      <p>Enter a keyword to generate a short story:</p>\n      <input type=\"text\" id=\"storyKeyword\" placeholder=\"e.g., adventure\" style=\"width:80%; padding:0.5rem; margin-bottom:1rem;\" />\n      <button class=\"unique-btn\" id=\"generateStoryBtn\">Generate Story</button>\n      <p id=\"generatedStory\" style=\"margin-top:1rem; font-style:italic;\"></p>\n    </div>\n  </div>\n\n  <!-- AI Quiz Modal -->\n  <div id=\"quizModal\" class=\"modal\">\n    <div class=\"modal-content\">\n      <button class=\"modal-close\" id=\"quizModalClose\">&times;</button>\n      <h2>AI Quiz</h2>\n      <p id=\"quizQuestion\">Loading question...</p>\n      <div id=\"quizOptions\"></div>\n      <p id=\"quizResult\" style=\"margin-top:1rem; font-weight:bold;\"></p>\n      <button class=\"unique-btn\" id=\"nextQuizBtn\" style=\"margin-top:1rem;\">Next Question</button>\n    </div>\n  </div>\n\n  <!-- AI Art Gallery Modal -->\n  <div id=\"artModal\" class=\"modal\">\n    <div class=\"modal-content\">\n      <button class=\"modal-close\" id=\"artModalClose\">&times;</button>\n      <h2>AI Art Gallery</h2>\n      <img id=\"artImage\" src=\"https://i.imgur.com/yourArt1.jpg\" alt=\"AI Art\" style=\"max-width:100%; border-radius:8px;\" onerror=\"this.src='https://via.placeholder.com/400?text=Art+Unavailable'\" />\n      <p id=\"artCaption\" style=\"margin-top:1rem;\"></p>\n      <button class=\"unique-btn\" id=\"nextArtBtn\" style=\"margin-top:1rem;\">Next Art</button>\n    </div>\n  </div>\n\n  <!-- === JAVASCRIPT Section === -->\n  <script>\n    // --- Initialize Particles Background ---\n    particlesJS.load('particles-js', 'https://raw.githubusercontent.com/VincentGarreau/particles.js/master/demo/particles.json', function() {\n      console.log('Particles.js config loaded');\n    });\n\n    // --- Mode Toggle ---\n    const modeToggle = document.getElementById('modeToggle');\n    modeToggle.addEventListener('click', () => {\n      document.body.classList.toggle('light-mode');\n      const icon = modeToggle.querySelector('i');\n      if(document.body.classList.contains('light-mode')) {\n        icon.classList.replace('fa-sun', 'fa-moon');\n      } else {\n        icon.classList.replace('fa-moon', 'fa-sun');\n      }\n    });\n\n    // --- Back to Top ---\n    const backToTop = document.getElementById('backToTop');\n    window.addEventListener('scroll', () => {\n      backToTop.style.display = window.scrollY > 300 ? 'block' : 'none';\n    });\n    backToTop.addEventListener('click', () => {\n      window.scrollTo({ top: 0, behavior: 'smooth' });\n    });\n\n    // --- Toast Notification ---\n    const toast = document.getElementById('toast');\n    function showToast(message) {\n      toast.textContent = message;\n      toast.classList.add('show');\n      setTimeout(() => { toast.classList.remove('show'); }, 3000);\n    }\n\n    // --- Random Tool Suggestion ---\n    const randomBtn = document.getElementById('randomBtn');\n    randomBtn.addEventListener('click', () => {\n      const cards = Array.from(document.querySelectorAll('.tool-card'));\n      if(cards.length) {\n        const randomCard = cards[Math.floor(Math.random() * cards.length)];\n        cards.forEach(card => card.classList.remove('highlight'));\n        randomCard.classList.add('highlight');\n        randomCard.scrollIntoView({ behavior: 'smooth', block: 'center' });\n        showToast(`How about trying \"${randomCard.querySelector('h3').textContent}\"?`);\n        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });\n      }\n    });\n\n    // --- AI Chatbot Modal ---\n    const chatBtn = document.getElementById('chatBtn');\n    const chatModal = document.getElementById('chatModal');\n    const chatModalClose = document.getElementById('chatModalClose');\n    chatBtn.addEventListener('click', () => { chatModal.style.display = 'flex'; });\n    chatModalClose.addEventListener('click', () => { chatModal.style.display = 'none'; });\n\n    // --- AI Story Generator ---\n    const storyBtn = document.getElementById('storyBtn');\n    const storyModal = document.getElementById('storyModal');\n    const storyModalClose = document.getElementById('storyModalClose');\n    const generateStoryBtn = document.getElementById('generateStoryBtn');\n    const storyKeyword = document.getElementById('storyKeyword');\n    const generatedStory = document.getElementById('generatedStory');\n    storyBtn.addEventListener('click', () => {\n      storyModal.style.display = 'flex';\n      storyKeyword.value = '';\n      generatedStory.textContent = '';\n    });\n    if(storyModalClose) { storyModalClose.addEventListener('click', () => { storyModal.style.display = 'none'; }); }\n    generateStoryBtn.addEventListener('click', () => {\n      const keyword = storyKeyword.value.trim();\n      if(!keyword) { showToast('Please enter a keyword!'); return; }\n      const story = `In a world of ${keyword}, an extraordinary journey unfolded—filled with wonder and unexpected twists.`;\n      generatedStory.textContent = story;\n    });\n\n    // --- AI Quiz Feature ---\n    const quizBtn = document.getElementById('quizBtn');\n    const quizModal = document.getElementById('quizModal');\n    const quizModalClose = document.getElementById('quizModalClose');\n    const quizQuestion = document.getElementById('quizQuestion');\n    const quizOptions = document.getElementById('quizOptions');\n    const quizResult = document.getElementById('quizResult');\n    const nextQuizBtn = document.getElementById('nextQuizBtn');\n    const quizData = [\n      {\n        question: \"Which company developed ChatGPT?\",\n        options: [\"Google\", \"OpenAI\", \"Microsoft\", \"IBM\"],\n        answer: \"OpenAI\"\n      },\n      {\n        question: \"What does AI stand for?\",\n        options: [\"Artificial Intelligence\", \"Automated Internet\", \"Advanced Innovation\", \"None of these\"],\n        answer: \"Artificial Intelligence\"\n      },\n      {\n        question: \"Which tool is famous for generating images?\",\n        options: [\"DeepSeek\", \"Craiyon\", \"ChatGPT\", \"Google Colab\"],\n        answer: \"Craiyon\"\n      }\n    ];\n    let currentQuiz = 0;\n    function loadQuiz() {\n      quizResult.textContent = \"\";\n      const data = quizData[currentQuiz];\n      quizQuestion.textContent = data.question;\n      quizOptions.innerHTML = \"\";\n      data.options.forEach(option => {\n        const btn = document.createElement('button');\n        btn.textContent = option;\n        btn.style.margin = \"0.5rem\";\n        btn.className = \"unique-btn\";\n        btn.addEventListener('click', () => {\n          if(option === data.answer) {\n            quizResult.textContent = \"Correct!\";\n            showToast(\"Correct answer!\");\n          } else {\n            quizResult.textContent = `Wrong! The correct answer is ${data.answer}.`;\n            showToast(\"Incorrect answer!\");\n          }\n        });\n        quizOptions.appendChild(btn);\n      });\n    }\n    quizBtn.addEventListener('click', () => {\n      quizModal.style.display = 'flex';\n      currentQuiz = 0;\n      loadQuiz();\n    });\n    if(quizModalClose) { quizModalClose.addEventListener('click', () => { quizModal.style.display = 'none'; }); }\n    nextQuizBtn.addEventListener('click', () => {\n      currentQuiz = (currentQuiz + 1) % quizData.length;\n      loadQuiz();\n    });\n\n    // --- AI Art Gallery Feature ---\n    const artBtn = document.getElementById('artBtn');\n    const artModal = document.getElementById('artModal');\n    const artModalClose = document.getElementById('artModalClose');\n    const artImage = document.getElementById('artImage');\n    const artCaption = document.getElementById('artCaption');\n    const nextArtBtn = document.getElementById('nextArtBtn');\n    const artGallery = [\n      { src: \"https://i.imgur.com/yourArt1.jpg\", caption: \"Surreal AI dreamscape\" },\n      { src: \"https://i.imgur.com/yourArt2.jpg\", caption: \"Abstract AI expression\" },\n      { src: \"https://i.imgur.com/yourArt3.jpg\", caption: \"Futuristic AI vision\" }\n    ];\n    let currentArt = 0;\n    artBtn.addEventListener('click', () => {\n      artModal.style.display = 'flex';\n      currentArt = 0;\n      artImage.src = artGallery[currentArt].src;\n      artCaption.textContent = artGallery[currentArt].caption;\n    });\n    if(artModalClose) { artModalClose.addEventListener('click', () => { artModal.style.display = 'none'; }); }\n    nextArtBtn.addEventListener('click', () => {\n      currentArt = (currentArt + 1) % artGallery.length;\n      artImage.src = artGallery[currentArt].src;\n      artCaption.textContent = artGallery[currentArt].caption;\n    });\n\n    // --- Voice Assistant Feature: Speak a Random AI Fact ---\n    const voiceBtn = document.getElementById('voiceBtn');\n    const voiceFacts = [\n      \"AI is revolutionizing every industry, from healthcare to entertainment.\",\n      \"Some AI models are trained on billions of words from the internet.\",\n      \"AI can now generate art, music, and creative writing!\",\n      \"Interactive AI tools make technology accessible to everyone.\"\n    ];\n    voiceBtn.addEventListener('click', () => {\n      const randomFact = voiceFacts[Math.floor(Math.random() * voiceFacts.length)];\n      if ('speechSynthesis' in window) {\n        const utterance = new SpeechSynthesisUtterance(randomFact);\n        speechSynthesis.speak(utterance);\n      } else {\n        showToast(\"Your browser doesn't support speech synthesis.\");\n      }\n      showToast(randomFact);\n    });\n\n    // --- End Unique Features ---\n  </script>\n</body>\n</html>\n```
 
-  <!-- Live AI News Ticker -->
-  <div class="news-ticker">
-    <div class="ticker-text">
-      Breaking: New AI breakthrough! &nbsp;&nbsp;&nbsp;
-      AI now composes symphonies on demand! &nbsp;&nbsp;&nbsp;
-      Free AI tools are reshaping innovation! &nbsp;&nbsp;&nbsp;
-      Stay ahead with cutting-edge AI insights!
-    </div>
-  </div>
+---
 
-  <!-- Navigation -->
-  <nav class="navbar">
-    <div class="logo">Aivana</div>
-    <div class="nav-buttons">
-      <!-- Mode Toggle, Submit, Sign In -->
-      <button id="modeToggle"><i class="fas fa-sun"></i></button>
-      <button id="submitBtn"><i class="fas fa-upload"></i> Submit AI</button>
-      <button id="authBtn"><i class="fas fa-user"></i> Sign In</button>
-      <!-- NEW: Chat with AI Vana -->
-      <button id="chatBtn"><i class="fas fa-comments"></i> Chat with AI Vana</button>
-    </div>
-  </nav>
+### Explanation & Customization
 
-  <!-- Header -->
-  <header class="header">
-    <h1>Free AI Tools & Unique Experiences</h1>
-    <p>Curated collection of free-to-use AI resources plus exclusive interactive features</p>
-  </header>
+1. **Full-Screen Chatbot Modal:**  
+   The chatbot modal (with id `chatModal`) uses the class `fullscreen` so its content expands to full screen. When you tap on "Chat with AI Vana," it opens in full-screen mode.
 
-  <!-- Main Content -->
-  <div class="container">
-    <!-- Search & Unique Feature Buttons -->
-    <div class="search-container">
-      <input type="text" id="toolSearch" placeholder="Search for AI tools..." />
-      <br />
-      <button class="unique-btn" id="randomBtn">Surprise Me!</button>
-      <button class="unique-btn" id="storyBtn">Generate AI Story</button>
-      <button class="unique-btn" id="quizBtn">Take AI Quiz</button>
-      <button class="unique-btn" id="artBtn">View AI Art Gallery</button>
-      <button class="unique-btn" id="voiceBtn">Speak AI Fact</button>
-    </div>
+2. **Unique Features Included:**  
+   - **Live AI News Ticker** at the top.  
+   - **Interactive Particles Background** via particles.js.  
+   - **Various Modals:** For AI Chatbot, Story Generator, Quiz, Art Gallery.  
+   - **Voice Assistant Button:** Reads out a random AI fact.  
+   - **Back-to-Top and Toast Notifications** for smooth UX.
 
-    <!-- Tools Grid (Your AI Tools Cards) -->
-    <div class="tools-grid" id="toolsContainer">
-      <!-- Example Card: (Repeat or add more as needed) -->
-      <div class="tool-card" data-tool="DeepSeek">
-        <button class="fav-btn" data-tool="DeepSeek"><i class="far fa-heart"></i></button>
-        <span class="free-badge">Free API</span>
-        <h3>DeepSeek</h3>
-        <p>Advanced AI assistant for research and development.</p>
-        <a href="https://deepseek.com" target="_blank">Visit Tool <i class="fas fa-external-link-alt"></i></a>
-        <button class="share-btn" data-link="https://deepseek.com"><i class="fas fa-share-alt"></i></button>
-      </div>
-      <!-- Add additional cards similarly... -->
-    </div>
-  </div>
+3. **Button Event Handlers:**  
+   All buttons have associated JavaScript functions that open/close modals or perform actions (like generating a story or starting a quiz).
 
-  <!-- Back to Top Button -->
-  <button id="backToTop" class="back-to-top"><i class="fas fa-arrow-up"></i></button>
+4. **Resource URLs:**  
+   Make sure to update any placeholder URLs (e.g., for the chatbot iframe source or art gallery images) with your actual resources.
 
-  <!-- Toast Notification -->
-  <div id="toast" class="toast"></div>
+5. **Deployment:**  
+   Save this as your `index.html` and deploy via GitHub Pages, Netlify, or your preferred hosting solution. Test each feature to ensure everything works as expected.
 
-  <!-- === MODALS FOR UNIQUE FEATURES === -->
-
-  <!-- AI Chatbot Modal (Chat with AI Vana) -->
-  <div id="chatModal" class="modal">
-    <div class="modal-content">
-      <button class="modal-close" id="chatModalClose">&times;</button>
-      <h2>Chat with AI Vana</h2>
-      <!-- Replace the src URL with your own AI chatbot deployment -->
-      <iframe src="https://creep7p-ai-vana.hf.space" width="100%" height="400" style="border:none;"></iframe>
-    </div>
-  </div>
-
-  <!-- AI Story Generator Modal -->
-  <div id="storyModal" class="modal">
-    <div class="modal-content">
-      <button class="modal-close" id="storyModalClose">&times;</button>
-      <h2>AI Story Generator</h2>
-      <p>Enter a keyword to generate a short story:</p>
-      <input type="text" id="storyKeyword" placeholder="e.g., adventure" style="width:80%; padding:0.5rem; margin-bottom:1rem;" />
-      <button class="unique-btn" id="generateStoryBtn">Generate Story</button>
-      <p id="generatedStory" style="margin-top:1rem; font-style:italic;"></p>
-    </div>
-  </div>
-
-  <!-- AI Quiz Modal -->
-  <div id="quizModal" class="modal">
-    <div class="modal-content">
-      <button class="modal-close" id="quizModalClose">&times;</button>
-      <h2>AI Quiz</h2>
-      <p id="quizQuestion">Loading question...</p>
-      <div id="quizOptions"></div>
-      <p id="quizResult" style="margin-top:1rem; font-weight:bold;"></p>
-      <button class="unique-btn" id="nextQuizBtn" style="margin-top:1rem;">Next Question</button>
-    </div>
-  </div>
-
-  <!-- AI Art Gallery Modal -->
-  <div id="artModal" class="modal">
-    <div class="modal-content">
-      <button class="modal-close" id="artModalClose">&times;</button>
-      <h2>AI Art Gallery</h2>
-      <img id="artImage" src="https://i.imgur.com/yourArt1.jpg" alt="AI Art" style="max-width:100%; border-radius:8px;" onerror="this.src='https://via.placeholder.com/400?text=Art+Unavailable'" />
-      <p id="artCaption" style="margin-top:1rem;"></p>
-      <button class="unique-btn" id="nextArtBtn" style="margin-top:1rem;">Next Art</button>
-    </div>
-  </div>
-
-  <!-- === JAVASCRIPT Section === -->
-  <script>
-    // --- Initialize Particles Background ---
-    particlesJS.load('particles-js', 'https://raw.githubusercontent.com/VincentGarreau/particles.js/master/demo/particles.json', function() {
-      console.log('Particles.js config loaded');
-    });
-
-    // --- Live News Ticker is Static (update if you integrate a live API) ---
-
-    // --- Mode Toggle ---
-    const modeToggle = document.getElementById('modeToggle');
-    modeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('light-mode');
-      const icon = modeToggle.querySelector('i');
-      if(document.body.classList.contains('light-mode')) {
-        icon.classList.replace('fa-sun', 'fa-moon');
-      } else {
-        icon.classList.replace('fa-moon', 'fa-sun');
-      }
-    });
-
-    // --- Back to Top ---
-    const backToTop = document.getElementById('backToTop');
-    window.addEventListener('scroll', () => {
-      backToTop.style.display = window.scrollY > 300 ? 'block' : 'none';
-    });
-    backToTop.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    // --- Toast Notification ---
-    const toast = document.getElementById('toast');
-    function showToast(message) {
-      toast.textContent = message;
-      toast.classList.add('show');
-      setTimeout(() => { toast.classList.remove('show'); }, 3000);
-    }
-
-    // --- Random Tool Suggestion ---
-    const randomBtn = document.getElementById('randomBtn');
-    randomBtn.addEventListener('click', () => {
-      const cards = Array.from(document.querySelectorAll('.tool-card'));
-      if(cards.length) {
-        const randomCard = cards[Math.floor(Math.random() * cards.length)];
-        cards.forEach(card => card.classList.remove('highlight'));
-        randomCard.classList.add('highlight');
-        randomCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        showToast(`How about trying "${randomCard.querySelector('h3').textContent}"?`);
-        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-      }
-    });
-
-    // --- AI Chatbot Modal ---
-    const chatBtn = document.getElementById('chatBtn');
-    const chatModal = document.getElementById('chatModal');
-    const chatModalClose = document.getElementById('chatModalClose');
-    chatBtn.addEventListener('click', () => { chatModal.style.display = 'flex'; });
-    chatModalClose.addEventListener('click', () => { chatModal.style.display = 'none'; });
-
-    // --- AI Story Generator ---
-    const storyBtn = document.getElementById('storyBtn');
-    const storyModal = document.getElementById('storyModal');
-    const storyModalClose = document.getElementById('storyModalClose');
-    const generateStoryBtn = document.getElementById('generateStoryBtn');
-    const storyKeyword = document.getElementById('storyKeyword');
-    const generatedStory = document.getElementById('generatedStory');
-    storyBtn.addEventListener('click', () => {
-      storyModal.style.display = 'flex';
-      storyKeyword.value = '';
-      generatedStory.textContent = '';
-    });
-    storyModalClose.addEventListener('click', () => { storyModal.style.display = 'none'; });
-    generateStoryBtn.addEventListener('click', () => {
-      const keyword = storyKeyword.value.trim();
-      if(!keyword) { showToast("Please enter a keyword!"); return; }
-      const story = `In a world of ${keyword}, an extraordinary journey unfolded—filled with wonder and unexpected twists that changed destinies.`;
-      generatedStory.textContent = story;
-    });
-
-    // --- AI Quiz Feature ---
-    const quizBtn = document.getElementById('quizBtn');
-    const quizModal = document.getElementById('quizModal');
-    const quizModalClose = document.getElementById('quizModalClose');
-    const quizQuestion = document.getElementById('quizQuestion');
-    const quizOptions = document.getElementById('quizOptions');
-    const quizResult = document.getElementById('quizResult');
-    const nextQuizBtn = document.getElementById('nextQuizBtn');
-    const quizData = [
-      {
-        question: "Which company developed ChatGPT?",
-        options: ["Google", "OpenAI", "Microsoft", "IBM"],
-        answer: "OpenAI"
-      },
-      {
-        question: "What does AI stand for?",
-        options: ["Artificial Intelligence", "Automated Internet", "Advanced Innovation", "None of these"],
-        answer: "Artificial Intelligence"
-      },
-      {
-        question: "Which tool is famous for generating images?",
-        options: ["DeepSeek", "Craiyon", "ChatGPT", "Google Colab"],
-        answer: "Craiyon"
-      }
-    ];
-    let currentQuiz = 0;
-    function loadQuiz() {
-      quizResult.textContent = "";
-      const data = quizData[currentQuiz];
-      quizQuestion.textContent = data.question;
-      quizOptions.innerHTML = "";
-      data.options.forEach(option => {
-        const btn = document.createElement('button');
-        btn.textContent = option;
-        btn.style.margin = "0.5rem";
-        btn.className = "unique-btn";
-        btn.addEventListener('click', () => {
-          if(option === data.answer) {
-            quizResult.textContent = "Correct!";
-            showToast("Correct answer!");
-          } else {
-            quizResult.textContent = `Wrong! The correct answer is ${data.answer}.`;
-            showToast("Incorrect answer!");
-          }
-        });
-        quizOptions.appendChild(btn);
-      });
-    }
-    quizBtn.addEventListener('click', () => {
-      quizModal.style.display = 'flex';
-      currentQuiz = 0;
-      loadQuiz();
-    });
-    quizModalClose.addEventListener('click', () => { quizModal.style.display = 'none'; });
-    nextQuizBtn.addEventListener('click', () => {
-      currentQuiz = (currentQuiz + 1) % quizData.length;
-      loadQuiz();
-    });
-
-    // --- AI Art Gallery Feature ---
-    const artBtn = document.getElementById('artBtn');
-    const artModal = document.getElementById('artModal');
-    const artModalClose = document.getElementById('artModalClose');
-    const artImage = document.getElementById('artImage');
-    const artCaption = document.getElementById('artCaption');
-    const nextArtBtn = document.getElementById('nextArtBtn');
-    const artGallery = [
-      { src: "https://i.imgur.com/yourArt1.jpg", caption: "Surreal AI dreamscape" },
-      { src: "https://i.imgur.com/yourArt2.jpg", caption: "Abstract AI expression" },
-      { src: "https://i.imgur.com/yourArt3.jpg", caption: "Futuristic AI vision" }
-    ];
-    let currentArt = 0;
-    artBtn.addEventListener('click', () => {
-      artModal.style.display = 'flex';
-      currentArt = 0;
-      artImage.src = artGallery[currentArt].src;
-      artCaption.textContent = artGallery[currentArt].caption;
-    });
-    artModalClose.addEventListener('click', () => { artModal.style.display = 'none'; });
-    nextArtBtn.addEventListener('click', () => {
-      currentArt = (currentArt + 1) % artGallery.length;
-      artImage.src = artGallery[currentArt].src;
-      artCaption.textContent = artGallery[currentArt].caption;
-    });
-
-    // --- Voice Assistant Feature: Speak a Random AI Fact ---
-    const voiceBtn = document.getElementById('voiceBtn');
-    const voiceFacts = [
-      "AI is revolutionizing every industry, from healthcare to entertainment.",
-      "Did you know that some AI models are trained on billions of words?",
-      "AI can now generate art, music, and even creative writing!",
-      "Interactive AI tools make technology accessible to everyone."
-    ];
-    voiceBtn.addEventListener('click', () => {
-      const randomFact = voiceFacts[Math.floor(Math.random() * voiceFacts.length)];
-      if ('speechSynthesis' in window) {
-        const utterance = new SpeechSynthesisUtterance(randomFact);
-        speechSynthesis.speak(utterance);
-      } else {
-        showToast("Sorry, your browser does not support speech synthesis.");
-      }
-      showToast(randomFact);
-    });
-    // --- End Unique Features ---
-  </script>
-</body>
-</html>
-
+This version is organized, feature-rich, and should help your website stand out. Let me know if you need further adjustments or additional features!
 
