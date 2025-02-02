@@ -7,9 +7,6 @@
   <!-- Google Fonts & Font Awesome -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
   <!-- Confetti Library -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   <style>
@@ -240,54 +237,23 @@
       50% { box-shadow: 0 0 20px var(--accent); }
       100% { box-shadow: 0 0 0px var(--accent); }
     }
-    /* Auth Modal */
-    .auth-modal, .submit-modal {
-      display: none;
+    /* Back to Top Button */
+    .back-to-top {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(10px);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-    .modal-content {
-      background: var(--surface);
-      padding: 2rem;
-      border-radius: 16px;
-      width: 400px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    .modal-content input, .modal-content textarea {
-      width: 100%;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      color: var(--text);
-    }
-    .modal-content button {
-      width: 100%;
-      padding: 1rem;
-      background: linear-gradient(45deg, var(--primary), var(--secondary));
-      border: none;
-      border-radius: 8px;
+      bottom: 80px;
+      right: 20px;
+      background: var(--primary);
       color: white;
+      border: none;
+      padding: 0.75rem;
+      border-radius: 50%;
       cursor: pointer;
-      transition: all 0.3s ease;
+      display: none;
+      z-index: 1100;
+      transition: background 0.3s ease;
     }
-    .modal-content button:hover {
-      transform: scale(1.02);
-      box-shadow: var(--neon);
-    }
-    .modal-error {
-      color: #ef4444;
-      margin: 1rem 0;
-      text-align: center;
+    .back-to-top:hover {
+      background: var(--secondary);
     }
     /* Toast Notification */
     .toast {
@@ -307,23 +273,37 @@
       opacity: 1;
       pointer-events: auto;
     }
-    /* Back to Top Button */
-    .back-to-top {
+    /* Fun "Did You Know?" Section */
+    .did-you-know {
+      margin: 2rem 0;
+      padding: 1rem;
+      background: var(--surface);
+      border-radius: 8px;
+      text-align: center;
+      font-size: 1.1rem;
+      animation: fadeIn 1s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    /* Easter Egg Button (hidden until hover) */
+    .easter-egg {
       position: fixed;
-      bottom: 80px;
-      right: 20px;
-      background: var(--primary);
+      bottom: 140px;
+      left: 20px;
+      background: var(--accent);
       color: white;
       border: none;
-      padding: 0.75rem;
-      border-radius: 50%;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
       cursor: pointer;
-      display: none;
+      opacity: 0.2;
+      transition: opacity 0.3s ease;
       z-index: 1100;
-      transition: background 0.3s ease;
     }
-    .back-to-top:hover {
-      background: var(--secondary);
+    .easter-egg:hover {
+      opacity: 1;
     }
   </style>
 </head>
@@ -353,9 +333,12 @@
       <button class="random-btn" id="randomBtn">Surprise Me!</button>
     </div>
 
+    <!-- "Did You Know?" Fun Facts Section -->
+    <div class="did-you-know" id="didYouKnow"></div>
+
     <!-- Tools Grid -->
     <div class="tools-grid" id="toolsContainer">
-      <!-- Predefined Tool Cards -->
+      <!-- Predefined Tool Cards (sample cards, add your own as needed) -->
       <div class="tool-card" data-tool="DeepSeek">
         <button class="fav-btn" data-tool="DeepSeek"><i class="far fa-heart"></i></button>
         <span class="free-badge">Free API</span>
@@ -372,366 +355,88 @@
         <a href="https://chat.openai.com" target="_blank">Start Chatting <i class="fas fa-external-link-alt"></i></a>
         <button class="share-btn" data-link="https://chat.openai.com"><i class="fas fa-share-alt"></i></button>
       </div>
-      <div class="tool-card" data-tool="DALL-E 3">
-        <button class="fav-btn" data-tool="DALL-E 3"><i class="far fa-heart"></i></button>
-        <span class="free-badge">Free via Bing</span>
-        <h3>DALL-E 3</h3>
-        <p>Generate images for free using Bing Chat.</p>
-        <a href="https://www.bing.com/create" target="_blank">Create Art <i class="fas fa-external-link-alt"></i></a>
-        <button class="share-btn" data-link="https://www.bing.com/create"><i class="fas fa-share-alt"></i></button>
-      </div>
-      <div class="tool-card" data-tool="Stable Diffusion">
-        <button class="fav-btn" data-tool="Stable Diffusion"><i class="far fa-heart"></i></button>
-        <span class="free-badge">Free Demo</span>
-        <h3>Stable Diffusion</h3>
-        <p>Generate high-quality images with free Stable Diffusion demos.</p>
-        <a href="https://stablediffusionweb.com" target="_blank">Explore <i class="fas fa-external-link-alt"></i></a>
-        <button class="share-btn" data-link="https://stablediffusionweb.com"><i class="fas fa-share-alt"></i></button>
-      </div>
-      <div class="tool-card" data-tool="DeepAI">
-        <button class="fav-btn" data-tool="DeepAI"><i class="far fa-heart"></i></button>
-        <span class="free-badge">Free API</span>
-        <h3>DeepAI</h3>
-        <p>Access a range of free AI APIs for image and text processing.</p>
-        <a href="https://deepai.org" target="_blank">Try It Now <i class="fas fa-external-link-alt"></i></a>
-        <button class="share-btn" data-link="https://deepai.org"><i class="fas fa-share-alt"></i></button>
-      </div>
-      <div class="tool-card" data-tool="Hugging Face Spaces">
-        <button class="fav-btn" data-tool="Hugging Face Spaces"><i class="far fa-heart"></i></button>
-        <span class="free-badge">Free Demo</span>
-        <h3>Hugging Face Spaces</h3>
-        <p>Discover and interact with community-powered AI demos and apps.</p>
-        <a href="https://huggingface.co/spaces" target="_blank">Explore Spaces <i class="fas fa-external-link-alt"></i></a>
-        <button class="share-btn" data-link="https://huggingface.co/spaces"><i class="fas fa-share-alt"></i></button>
-      </div>
-      <div class="tool-card" data-tool="Craiyon">
-        <button class="fav-btn" data-tool="Craiyon"><i class="far fa-heart"></i></button>
-        <span class="free-badge">Free Demo</span>
-        <h3>Craiyon</h3>
-        <p>Create fun AI-generated art (formerly DALL-E Mini).</p>
-        <a href="https://www.craiyon.com" target="_blank">Create Art <i class="fas fa-external-link-alt"></i></a>
-        <button class="share-btn" data-link="https://www.craiyon.com"><i class="fas fa-share-alt"></i></button>
-      </div>
-      <!-- (More preloaded cards can be added similarly) -->
+      <!-- Add more tool cards as needed -->
     </div>
   </div>
-
-  <!-- Toast Notification -->
-  <div id="toast" class="toast"></div>
 
   <!-- Back to Top Button -->
   <button id="backToTop" class="back-to-top"><i class="fas fa-arrow-up"></i></button>
 
-  <!-- Auth Modal -->
-  <div id="authModal" class="auth-modal">
-    <div class="modal-content">
-      <h2>Welcome to Aivana</h2>
-      <input type="email" id="authEmail" placeholder="Email" />
-      <input type="password" id="authPassword" placeholder="Password" />
-      <button id="authAction">Sign In</button>
-      <p class="auth-switch">New user? <a id="switchAuthMode" href="#">Create account</a></p>
-      <p id="authError" class="modal-error"></p>
-    </div>
-  </div>
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"></div>
 
-  <!-- Submit AI Modal -->
-  <div id="submitModal" class="submit-modal">
-    <div class="modal-content">
-      <h2>Submit Your AI Tool</h2>
-      <input type="text" id="submitName" placeholder="Tool Name" />
-      <textarea id="submitDesc" rows="3" placeholder="Short Description"></textarea>
-      <input type="url" id="submitURL" placeholder="Tool URL (https://...)" />
-      <input type="text" id="submitBadge" placeholder="Free Info (e.g., 'Free Demo', 'Free API')" />
-      <button id="submitAction">Submit Tool</button>
-      <p id="submitError" class="modal-error"></p>
-    </div>
-  </div>
+  <!-- Hidden Easter Egg Button -->
+  <button id="easterEggBtn" class="easter-egg">Surprise!</button>
 
+  <!-- JavaScript Section -->
   <script>
-    // Firebase Configuration (REPLACE WITH YOUR VALUES)
-    const firebaseConfig = {
-       apiKey: "AIzaSyAsdnqop6GmRAR1n97KIMHAwVAQ3hDxbOw",
-  authDomain: "aihub-auth-bb6bc.firebaseapp.com",
-  projectId: "aihub-auth-bb6bc",
-  storageBucket: "aihub-auth-bb6bc.firebasestorage.app",
-  messagingSenderId: "898791332620",
-  appId: "1:898791332620:web:5390e2fbde92aef212c729",
-    };
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
+    // --- FUN FEATURES & INTERACTIONS ---
+
+    // Random "Did You Know?" Facts
+    const facts = [
+      "Did you know? AI can now generate art, music, and even poetry!",
+      "Fun Fact: Some AI models are trained on billions of words from the internet.",
+      "Did you know? AI chatbots are helping people learn new languages!",
+      "Fun Fact: AI is used in healthcare for everything from diagnostics to drug discovery.",
+      "Did you know? Free AI tools are making innovation accessible to everyone!"
+    ];
+    function displayRandomFact() {
+      const factElement = document.getElementById('didYouKnow');
+      const randomFact = facts[Math.floor(Math.random() * facts.length)];
+      factElement.textContent = randomFact;
     }
-    const auth = firebase.auth();
+    // Display a random fact on page load
+    displayRandomFact();
+    // Optionally, refresh the fact every 10 seconds:
+    // setInterval(displayRandomFact, 10000);
 
-    // DOM Elements
-    const modeToggle = document.getElementById("modeToggle");
-    const authBtn = document.getElementById("authBtn");
-    const submitBtn = document.getElementById("submitBtn");
-    const authModal = document.getElementById("authModal");
-    const submitModal = document.getElementById("submitModal");
-    const authAction = document.getElementById("authAction");
-    const switchAuthMode = document.getElementById("switchAuthMode");
-    const authError = document.getElementById("authError");
-    const toast = document.getElementById("toast");
-    const toolSearch = document.getElementById("toolSearch");
-    const toolsContainer = document.getElementById("toolsContainer");
-    const randomBtn = document.getElementById("randomBtn");
-    const backToTop = document.getElementById("backToTop");
-    const submitAction = document.getElementById("submitAction");
-    const submitError = document.getElementById("submitError");
-
-    let isSignUp = false;
-
-    // Toggle Dark/Light Mode
-    modeToggle.addEventListener("click", () => {
-      document.body.classList.toggle("light-mode");
-      const icon = modeToggle.querySelector("i");
-      if (document.body.classList.contains("light-mode")) {
-        icon.classList.remove("fa-sun");
-        icon.classList.add("fa-moon");
-      } else {
-        icon.classList.remove("fa-moon");
-        icon.classList.add("fa-sun");
-      }
+    // Back to Top Button
+    const backToTop = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      backToTop.style.display = window.scrollY > 300 ? 'block' : 'none';
     });
-
-    // Auth Modal Functions
-    function openAuth() {
-      authModal.style.display = "flex";
-    }
-    function closeAuth() {
-      authModal.style.display = "none";
-      authError.textContent = "";
-      document.getElementById("authEmail").value = "";
-      document.getElementById("authPassword").value = "";
-    }
-    switchAuthMode.addEventListener("click", (e) => {
-      e.preventDefault();
-      isSignUp = !isSignUp;
-      authAction.textContent = isSignUp ? "Create Account" : "Sign In";
-      switchAuthMode.textContent = isSignUp ? "Sign In" : "Create account";
-      authError.textContent = "";
-    });
-    authAction.addEventListener("click", async () => {
-      const email = document.getElementById("authEmail").value;
-      const password = document.getElementById("authPassword").value;
-      try {
-        if (isSignUp) {
-          await auth.createUserWithEmailAndPassword(email, password);
-          showToast("Account created successfully!");
-        } else {
-          await auth.signInWithEmailAndPassword(email, password);
-          showToast("Signed in successfully!");
-        }
-        closeAuth();
-      } catch (error) {
-        authError.textContent = getAuthErrorMessage(error.code);
-      }
-    });
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        authBtn.innerHTML = `<i class="fas fa-user"></i> ${user.email}`;
-        authBtn.onclick = () => {
-          auth.signOut();
-          showToast("Signed out successfully!");
-        };
-      } else {
-        authBtn.innerHTML = `<i class="fas fa-user"></i> Sign In`;
-        authBtn.onclick = openAuth;
-      }
-    });
-    function getAuthErrorMessage(code) {
-      const messages = {
-        "auth/invalid-email": "Invalid email address",
-        "auth/user-disabled": "Account disabled",
-        "auth/user-not-found": "Account not found",
-        "auth/wrong-password": "Incorrect password",
-        "auth/email-already-in-use": "Email already registered",
-        "auth/weak-password": "Password must be at least 6 characters"
-      };
-      return messages[code] || "Authentication failed";
-    }
-
-    // Toast Notification Function
-    function showToast(message) {
-      toast.textContent = message;
-      toast.classList.add("show");
-      setTimeout(() => {
-        toast.classList.remove("show");
-      }, 3000);
-    }
-
-    // Search Filter
-    toolSearch.addEventListener("input", () => {
-      const query = toolSearch.value.toLowerCase();
-      const cards = toolsContainer.querySelectorAll(".tool-card");
-      cards.forEach(card => {
-        const toolName = card.querySelector("h3").textContent.toLowerCase();
-        card.style.display = toolName.includes(query) ? "block" : "none";
-      });
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
     // Random Tool Suggestion with Confetti
-    randomBtn.addEventListener("click", () => {
-      const cards = Array.from(document.querySelectorAll(".tool-card"));
+    const randomBtn = document.getElementById('randomBtn');
+    randomBtn.addEventListener('click', () => {
+      const cards = Array.from(document.querySelectorAll('.tool-card'));
       if (cards.length) {
         const randomCard = cards[Math.floor(Math.random() * cards.length)];
-        cards.forEach(card => card.classList.remove("highlight"));
-        randomCard.classList.add("highlight");
-        randomCard.scrollIntoView({ behavior: "smooth", block: "center" });
-        showToast(`How about trying "${randomCard.querySelector("h3").textContent}"?`);
+        cards.forEach(card => card.classList.remove('highlight'));
+        randomCard.classList.add('highlight');
+        randomCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        showToast(`How about trying "${randomCard.querySelector('h3').textContent}"?`);
         // Fire confetti
         confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
       }
     });
 
-    // Back to Top Button
-    window.addEventListener("scroll", () => {
-      backToTop.style.display = window.scrollY > 300 ? "block" : "none";
-    });
-    backToTop.addEventListener("click", () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-
-    // Favorites Functionality
-    const favButtons = document.querySelectorAll(".fav-btn");
-    let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-    function updateFavorites() {
-      favButtons.forEach(btn => {
-        const tool = btn.getAttribute("data-tool");
-        if (favorites.includes(tool)) {
-          btn.classList.add("active");
-          btn.innerHTML = '<i class="fas fa-heart"></i>';
-        } else {
-          btn.classList.remove("active");
-          btn.innerHTML = '<i class="far fa-heart"></i>';
-        }
-      });
+    // Toast Notification Function
+    const toast = document.getElementById('toast');
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => { toast.classList.remove('show'); }, 3000);
     }
-    favButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        const tool = btn.getAttribute("data-tool");
-        if (favorites.includes(tool)) {
-          favorites = favorites.filter(item => item !== tool);
-          showToast(`Removed "${tool}" from favorites`);
-        } else {
-          favorites.push(tool);
-          showToast(`Added "${tool}" to favorites`);
-        }
-        localStorage.setItem("favorites", JSON.stringify(favorites));
-        updateFavorites();
-      });
-    });
-    updateFavorites();
 
-    // Share Button Functionality
-    const shareButtons = document.querySelectorAll(".share-btn");
-    shareButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        const link = btn.getAttribute("data-link");
-        navigator.clipboard.writeText(link).then(() => {
-          showToast("Tool link copied to clipboard!");
-        });
-      });
+    // Easter Egg Button: Plays a sound and shows a fun message
+    const easterEggBtn = document.getElementById('easterEggBtn');
+    easterEggBtn.addEventListener('click', () => {
+      showToast("You've found the Easter Egg! Enjoy the fun vibes!");
+      // Play a fun sound (replace URL with any free sound link if desired)
+      const audio = new Audio("https://www.soundjay.com/buttons/sounds/button-3.mp3");
+      audio.play();
+      // Also, launch some confetti!
+      confetti({ particleCount: 150, spread: 100, origin: { y: 0.4 } });
     });
 
-    // Submit AI Modal Functions
-    function openSubmitModal() {
-      submitModal.style.display = "flex";
-    }
-    function closeSubmitModal() {
-      submitModal.style.display = "none";
-      submitError.textContent = "";
-      document.getElementById("submitName").value = "";
-      document.getElementById("submitDesc").value = "";
-      document.getElementById("submitURL").value = "";
-      document.getElementById("submitBadge").value = "";
-    }
-    submitBtn.addEventListener("click", openSubmitModal);
-    submitAction.addEventListener("click", () => {
-      const name = document.getElementById("submitName").value.trim();
-      const desc = document.getElementById("submitDesc").value.trim();
-      const url = document.getElementById("submitURL").value.trim();
-      const badge = document.getElementById("submitBadge").value.trim() || "Free";
-      if (!name || !desc || !url) {
-        submitError.textContent = "Please fill in all required fields.";
-        return;
-      }
-      // Create new card element
-      const newCard = document.createElement("div");
-      newCard.classList.add("tool-card");
-      newCard.setAttribute("data-tool", name);
-      newCard.innerHTML = `
-        <button class="fav-btn" data-tool="${name}"><i class="far fa-heart"></i></button>
-        <span class="free-badge">${badge}</span>
-        <h3>${name}</h3>
-        <p>${desc}</p>
-        <a href="${url}" target="_blank">Visit Tool <i class="fas fa-external-link-alt"></i></a>
-        <button class="share-btn" data-link="${url}"><i class="fas fa-share-alt"></i></button>
-      `;
-      toolsContainer.appendChild(newCard);
-      // Re-attach event listeners to the new card's buttons
-      newCard.querySelector(".fav-btn").addEventListener("click", () => {
-        const tool = newCard.getAttribute("data-tool");
-        if (favorites.includes(tool)) {
-          favorites = favorites.filter(item => item !== tool);
-          showToast(`Removed "${tool}" from favorites`);
-        } else {
-          favorites.push(tool);
-          showToast(`Added "${tool}" to favorites`);
-        }
-        localStorage.setItem("favorites", JSON.stringify(favorites));
-        updateFavorites();
-      });
-      newCard.querySelector(".share-btn").addEventListener("click", () => {
-        const link = newCard.querySelector(".share-btn").getAttribute("data-link");
-        navigator.clipboard.writeText(link).then(() => {
-          showToast("Tool link copied to clipboard!");
-        });
-      });
-      // Save submitted tools to localStorage (optional)
-      let submittedTools = JSON.parse(localStorage.getItem("submittedTools")) || [];
-      submittedTools.push({ name, desc, url, badge });
-      localStorage.setItem("submittedTools", JSON.stringify(submittedTools));
-      showToast("Tool submitted successfully!");
-      closeSubmitModal();
-    });
+    // --- END FUN FEATURES ---
 
-    // On page load, add any previously submitted tools
-    window.addEventListener("load", () => {
-      let submittedTools = JSON.parse(localStorage.getItem("submittedTools")) || [];
-      submittedTools.forEach(tool => {
-        const newCard = document.createElement("div");
-        newCard.classList.add("tool-card");
-        newCard.setAttribute("data-tool", tool.name);
-        newCard.innerHTML = `
-          <button class="fav-btn" data-tool="${tool.name}"><i class="far fa-heart"></i></button>
-          <span class="free-badge">${tool.badge}</span>
-          <h3>${tool.name}</h3>
-          <p>${tool.desc}</p>
-          <a href="${tool.url}" target="_blank">Visit Tool <i class="fas fa-external-link-alt"></i></a>
-          <button class="share-btn" data-link="${tool.url}"><i class="fas fa-share-alt"></i></button>
-        `;
-        toolsContainer.appendChild(newCard);
-        newCard.querySelector(".fav-btn").addEventListener("click", () => {
-          const toolName = newCard.getAttribute("data-tool");
-          if (favorites.includes(toolName)) {
-            favorites = favorites.filter(item => item !== toolName);
-            showToast(`Removed "${toolName}" from favorites`);
-          } else {
-            favorites.push(toolName);
-            showToast(`Added "${toolName}" to favorites`);
-          }
-          localStorage.setItem("favorites", JSON.stringify(favorites));
-          updateFavorites();
-        });
-        newCard.querySelector(".share-btn").addEventListener("click", () => {
-          const link = newCard.querySelector(".share-btn").getAttribute("data-link");
-          navigator.clipboard.writeText(link).then(() => {
-            showToast("Tool link copied to clipboard!");
-          });
-        });
-      });
-    });
+    // (Other functionalities such as authentication, submission modals, etc. go here)
+
   </script>
 </body>
 </html>
