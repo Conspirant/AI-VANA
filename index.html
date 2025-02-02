@@ -125,7 +125,7 @@
     .search-container input:focus {
       background: rgba(255, 255, 255, 0.2);
     }
-    .random-btn, .meme-btn, .joke-btn {
+    .random-btn, .meme-btn, .joke-btn, .tip-btn, .bg-btn {
       margin-top: 1rem;
       padding: 0.75rem 1.5rem;
       font-size: 1rem;
@@ -157,6 +157,22 @@
     }
     .joke-btn:hover {
       background: #e0a800;
+    }
+    .tip-btn {
+      background: #17a2b8;
+      color: white;
+      margin-left: 0.5rem;
+    }
+    .tip-btn:hover {
+      background: #138496;
+    }
+    .bg-btn {
+      background: #6f42c1;
+      color: white;
+      margin-left: 0.5rem;
+    }
+    .bg-btn:hover {
+      background: #593196;
     }
     /* Tools Grid */
     .tools-grid {
@@ -384,6 +400,8 @@
       <button class="random-btn" id="randomBtn">Surprise Me!</button>
       <button class="meme-btn" id="memeBtn">AI Meme Generator</button>
       <button class="joke-btn" id="jokeBtn">Random AI Joke</button>
+      <button class="tip-btn" id="tipBtn">AI Tip</button>
+      <button class="bg-btn" id="bgBtn">Change Background</button>
     </div>
 
     <!-- "Did You Know?" Fun Facts Section -->
@@ -505,7 +523,8 @@
   <div id="memeModal" class="modal">
     <div class="modal-content">
       <button class="modal-close" id="memeModalClose">&times;</button>
-      <img id="memeImage" src="" alt="AI Meme" />
+      <!-- Use valid image URLs here. For testing, try using Imgur links. -->
+      <img id="memeImage" src="https://i.imgur.com/YourValidImage.jpg" alt="AI Meme" onerror="this.src='https://via.placeholder.com/400?text=No+Image+Found'" />
       <p id="memeCaption"></p>
     </div>
   </div>
@@ -549,7 +568,6 @@
         randomCard.classList.add('highlight');
         randomCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
         showToast(`How about trying "${randomCard.querySelector('h3').textContent}"?`);
-        // Fire confetti
         confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
       }
     });
@@ -571,17 +589,16 @@
       confetti({ particleCount: 150, spread: 100, origin: { y: 0.4 } });
     });
 
-    // --- AI Meme Generator ---
+    // AI Meme Generator
     const memeBtn = document.getElementById('memeBtn');
     const memeModal = document.getElementById('memeModal');
     const memeModalClose = document.getElementById('memeModalClose');
     const memeImage = document.getElementById('memeImage');
     const memeCaption = document.getElementById('memeCaption');
-    // A list of meme images and captions (update these URLs and captions as needed)
     const memes = [
-      { src: "https://i.imgur.com/1.jpg", caption: "When AI writes your code..." },
-      { src: "https://i.imgur.com/2.jpg", caption: "AI: I got this. Human: Really?" },
-      { src: "https://i.imgur.com/3.jpg", caption: "Coding with AI like a boss!" }
+      { src: "https://i.imgur.com/validImage1.jpg", caption: "When AI writes your code..." },
+      { src: "https://i.imgur.com/validImage2.jpg", caption: "AI: I got this. Human: Really?" },
+      { src: "https://i.imgur.com/validImage3.jpg", caption: "Coding with AI like a boss!" }
     ];
     memeBtn.addEventListener('click', () => {
       const randomMeme = memes[Math.floor(Math.random() * memes.length)];
@@ -598,7 +615,7 @@
       }
     });
 
-    // --- Random AI Joke ---
+    // Random AI Joke
     const jokeBtn = document.getElementById('jokeBtn');
     const jokes = [
       "Why did the AI cross the road? To optimize its neural network on the other side!",
@@ -608,6 +625,28 @@
     jokeBtn.addEventListener('click', () => {
       const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
       showToast(randomJoke);
+    });
+
+    // Random AI Tip
+    const tipBtn = document.getElementById('tipBtn');
+    const tips = [
+      "Tip: Experiment with different AI tools to find what suits your project best!",
+      "Tip: Did you know? Many AI tools are free to use with a bit of creativity.",
+      "Tip: Combine AI tools for powerful results – use one for data and another for insights!",
+      "Tip: Stay updated on new AI releases to always be ahead of the curve."
+    ];
+    tipBtn.addEventListener('click', () => {
+      const randomTip = tips[Math.floor(Math.random() * tips.length)];
+      showToast(randomTip);
+    });
+
+    // Background Color Changer
+    const bgBtn = document.getElementById('bgBtn');
+    const bgColors = ["#0f172a", "#1f2937", "#111827", "#4b5563", "#374151"];
+    bgBtn.addEventListener('click', () => {
+      const randomColor = bgColors[Math.floor(Math.random() * bgColors.length)];
+      document.body.style.background = randomColor;
+      showToast("Background color changed!");
     });
 
     // --- End Fun Features ---
